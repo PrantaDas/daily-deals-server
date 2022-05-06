@@ -42,6 +42,7 @@ async function run() {
         })
 
         // update quantity
+        // update restock quantity
 
         app.put('/products/:id', async (req, res) => {
             const item = req.body;
@@ -58,6 +59,8 @@ async function run() {
             const result = await productCollection.updateOne(filter, updateDoc, options);
             res.send(result);
         })
+
+
     }
     finally {
 
