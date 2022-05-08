@@ -33,37 +33,29 @@ async function run() {
             const token = authHeader.split(' ')[1];
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
                 if (err) {
-                    return res.status(403).send({
-                        message
-                            : 'forbidden access'
-                    })
+                    return 
                 }
                 console.log('decoded', decoded);
                 req.decoded = decoded;
+                next();
             })
-            console.log('inside jwt',authHeader);
-            next();
-        }
+
+            
+        };
+
+        // search by query using email
 
         app.get('/myitems', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
             console.log(email);
-            const items = { email: email };
-                const cursor = productCollection.find(items);
-                const result = await cursor.toArray();
-                res.send(result);
+            
             if (email === decodedEmail) {
                 const items = { email: email };
                 const cursor = productCollection.find(items);
                 const result = await cursor.toArray();
                 res.send(result);
             }
-            else{
-                res.status(403).send(({message:'forbidden access'}))
-            }
-            
-            console.log(result);
 
         })
 
@@ -134,16 +126,7 @@ async function run() {
             res.send(result);
         })
 
-        // search by query using email
-
-
-
-        // app.get('/products', async (req, res) => {
-        //     const items= { "name":"John" };
-        //     const cursor = productCollection.find(items);
-        //     const result = await cursor.toArray();
-        //     res.send(result)
-        // })
+        
 
 
 
